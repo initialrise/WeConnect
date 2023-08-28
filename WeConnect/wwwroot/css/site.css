@@ -1,0 +1,156 @@
+:root {
+    --gruvgrey: #35393b;
+    --gruv: #303030;
+    --gruvbg: #232627;
+    --gruvmajor: #c99272;
+    --gruvpost: #787878;
+    --gruvpostmain: #cdb2b2;
+    --gruvprofile: #ff7325;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--gruvpostmain);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--gruv);
+    padding: 10px;
+    color: var(--gruvmajor);
+}
+
+#brand {
+    color: #ff7325;
+}
+
+.searchBox {
+    width: 100%;
+    border-radius: 50px;
+    padding: 10px;
+    background-color: var(--gruvbg);
+    border: none;
+}
+
+form {
+    width: 100%;
+    padding: 0px 15px;
+}
+
+ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    gap: 15px;
+    padding: 10px 20px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#profile-head {
+    padding: 0px 15px;
+}
+
+.profile-name {
+    color: var(--gruvprofile);
+}
+
+body {
+    background-color: var(--gruvbg);
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#post-selector {
+    background-color: var(--gruvgrey);
+    margin-top: 15px;
+    width: 70%;
+}
+
+button {
+    background-color: var(--gruvgrey);
+    border-radius: 20px;
+    padding: 0px 15px 0px 15px;
+}
+
+textarea {
+    background-color: #1e1e1e;
+    margin-right: 10px;
+    resize: none;
+    height: 100%;
+    width: 90%;
+    border: none;
+}
+
+#create-post {
+    height: 100px;
+    padding: 20px;
+    margin-top: 15px;
+    width: 70%;
+    color: var(--gruvpost);
+    background-color: #1e1e1e;
+    display: flex;
+}
+
+.post-icon {
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 20px;
+}
+
+#posts {
+    margin-top: 15px;
+    width: 70%;
+    color: var(--gruvpost);
+}
+
+.post {
+    background-color: #1e1e1e;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-icon {
+    margin-right: 10px;
+    margin-left: 20px;
+}
+
+.post-stats {
+    margin-right: 15px;
+    width: 50px;
+}
+
+.content {
+    max-width: 900px;
+}
+
+.likes {
+    margin-bottom: 10px;
+}
+
+.rating {
+    display: inline-block;
+    width: 25px;
+}
+
+.post-container {
+    display: flex;
+    /* background-color: var(--gruvgrey); */
+    /* text-align: left; */
+    color: var(--gruvpost);
+}
+
+.profile-name {
+    margin-left: kk7kjj0px;
+}
