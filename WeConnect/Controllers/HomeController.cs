@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 using WeConnect.Models;
+
+
+
 
 namespace WeConnect.Controllers
 {
@@ -10,6 +14,7 @@ namespace WeConnect.Controllers
         [Authorize]
         public IActionResult Index()
         {
+            ViewData["name"]=  User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View();
         }
 

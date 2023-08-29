@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeConnect.Data;
 
@@ -11,9 +12,10 @@ using WeConnect.Data;
 namespace WeConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230829032612_FkeyAdditionPosts")]
+    partial class FkeyAdditionPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,6 +259,7 @@ namespace WeConnect.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -265,7 +268,7 @@ namespace WeConnect.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("WeConnect.Models.Threads", b =>
@@ -281,7 +284,7 @@ namespace WeConnect.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Threads", (string)null);
+                    b.ToTable("Threads");
 
                     b.HasData(
                         new
@@ -380,7 +383,9 @@ namespace WeConnect.Migrations
 
                     b.HasOne("WeConnect.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
 

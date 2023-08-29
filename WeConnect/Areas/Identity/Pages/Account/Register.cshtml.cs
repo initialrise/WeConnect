@@ -124,17 +124,15 @@ namespace WeConnect.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            /*
             Input = new()
             {
-                ThreadList = _db.Threads.GetAll().Select(i => new SelectListItem
+                ThreadList = _db.Threads.ToList().Select(t => new SelectListItem
                 {
-                    Text = i,
-                    Value = i
+                    Text = t.Name,
+                    Value = t.Id.ToString()
                 }
                 )
             };
-            */
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -148,7 +146,7 @@ namespace WeConnect.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.Name = Input.Name;
                 user.Turegno = Input.Turegno;
-                user.ThreadSubscribed = Input.ThreadSubscribed;
+                user.ThreadID = (int)Input.ThreadID;
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

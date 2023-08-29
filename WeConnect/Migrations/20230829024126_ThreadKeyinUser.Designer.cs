@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeConnect.Data;
 
@@ -11,9 +12,10 @@ using WeConnect.Data;
 namespace WeConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230829024126_ThreadKeyinUser")]
+    partial class ThreadKeyinUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,22 +252,17 @@ namespace WeConnect.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<int>("ThreadID")
+                    b.Property<int?>("ThreadsId")
                         .HasColumnType("int");
 
                     b.Property<int>("Timestamp")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ThreadID");
+                    b.HasIndex("ThreadsId");
 
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("WeConnect.Models.Threads", b =>
@@ -281,7 +278,7 @@ namespace WeConnect.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Threads", (string)null);
+                    b.ToTable("Threads");
 
                     b.HasData(
                         new
@@ -372,19 +369,11 @@ namespace WeConnect.Migrations
 
             modelBuilder.Entity("WeConnect.Models.Posts", b =>
                 {
-                    b.HasOne("WeConnect.Models.Threads", "ThreadSubscribed")
+                    b.HasOne("WeConnect.Models.Threads", "Threads")
                         .WithMany()
-                        .HasForeignKey("ThreadID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ThreadsId");
 
-                    b.HasOne("WeConnect.Models.ApplicationUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("Author");
-
-                    b.Navigation("ThreadSubscribed");
+                    b.Navigation("Threads");
                 });
 
             modelBuilder.Entity("WeConnect.Models.ApplicationUser", b =>
