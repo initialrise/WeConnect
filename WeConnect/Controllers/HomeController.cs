@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using WeConnect.Models;
 using WeConnect.Data;
-
-
-
+using WeConnect.ViewModels;
 
 namespace WeConnect.Controllers
 {
@@ -19,12 +17,55 @@ namespace WeConnect.Controllers
 		}
 
         [Authorize]
+        [HttpGet]
         public IActionResult Index()
         {
-            ViewData["name"]=  User.FindFirstValue(ClaimTypes.NameIdentifier);
-			List<Posts> posts = _db.Posts.ToList();
-            return View(posts);
+            var uid=  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var current_user = _db.ApplicationUsers.Find(uid);
+            ViewBag.uid = uid;
+                        ViewBag.threadID = current_user.ThreadID;
+                        ViewBag.postlists = _db.Posts.ToList();
+
+            /*
+                        IndexView iv = new IndexView();
+                        iv.User = current_user;
+                        iv.Posts = _db.Posts.ToList();
+            */
+            var posts = _db.Posts.ToList();
+            List<ApplicationUser> users = _db.ApplicationUsers.ToList();
+
+            List<Uposts> uposts = new List<Uposts>();
+        
+            foreach(var p in posts)
+            {
+                var up = new Uposts();
+                var uuid = p.UserID;
+                var uname = users.Where(u=>u.Id==uuid).First().Name;
+                //uname.
+                up.uname = uname;
+                up.Id = p.Id;
+                up.Likes = p.Likes;
+                up.Content = p.Content;
+                up.Dislikes = p.Dislikes;
+                up.Timestamp = p.Timestamp;
+                up.ImageURL = p.ImageURL;
+                up.ThreadID = p.ThreadID;
+                up.UserID = p.UserID;
+                uposts.Add(up);
+            }
+            ViewBag.uposts = uposts;
+            return View();
         }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Index(Posts post)
+        {
+            _db.Posts.Add(post);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
 
 
         public IActionResult Jobs()
@@ -36,10 +77,6 @@ namespace WeConnect.Controllers
             return View();
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
 
         public IActionResult Account()
         {
