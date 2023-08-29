@@ -5,6 +5,8 @@ using System.Security.Claims;
 using WeConnect.Models;
 using WeConnect.Data;
 using WeConnect.ViewModels;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace WeConnect.Controllers
 {
@@ -22,18 +24,13 @@ namespace WeConnect.Controllers
         {
             var uid=  User.FindFirstValue(ClaimTypes.NameIdentifier);
             var current_user = _db.ApplicationUsers.Find(uid);
+            var tid = current_user.ThreadID;
             ViewBag.uid = uid;
-                        ViewBag.threadID = current_user.ThreadID;
-                        ViewBag.postlists = _db.Posts.ToList();
+            ViewBag.threadID = tid; 
+            ViewBag.postlists = _db.Posts.ToList();
+            var posts = _db.Posts.ToList().Where(p=>p.ThreadID==tid);
 
-            /*
-                        IndexView iv = new IndexView();
-                        iv.User = current_user;
-                        iv.Posts = _db.Posts.ToList();
-            */
-            var posts = _db.Posts.ToList();
             List<ApplicationUser> users = _db.ApplicationUsers.ToList();
-
             List<Uposts> uposts = new List<Uposts>();
         
             foreach(var p in posts)
@@ -72,9 +69,26 @@ namespace WeConnect.Controllers
         {
             return View();
         }
-          public IActionResult Notices()
+			//Hosted web API REST Service base url
+        public async Task<ActionResult> Notices()
         {
-            return View();
+        string Baseurl = "https://gist.githubusercontent.com/";
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage Res = await client.GetAsync("ictsolved/34c4d9041f2749715c56eff551628995/raw");
+                if (Res.IsSuccessStatusCode)
+                {
+                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+					ViewBag.response = EmpResponse;
+                    //EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
+                }
+                return View();
+            }
+        
+
         }
 
 

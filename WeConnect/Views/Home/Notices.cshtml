@@ -3,3 +3,37 @@
 *@
 @{
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div id="noticeContainer"></div>
+
+@{
+    var json = ViewBag.response; // Assuming ViewBag.response contains the JSON data
+}
+
+<script>
+$(document).ready(function() {
+    var data = @Html.Raw(json); // Parse the JSON string
+
+    var notices = data.notices;
+
+    // Loop through each notice
+    $.each(notices, function(index, notice) {
+        var title = notice.title;
+        var url = notice.url;
+        var date = notice.date;
+
+        // Create a new notice element
+        var noticeElement = $("<div>").addClass("notice");
+        var titleElement = $("<h3>").text(title);
+        var urlElement = $("<a>").attr("href", url).text("Read more");
+        var dateElement = $("<p>").text("Date: " + date);
+
+        // Append elements to notice
+        noticeElement.append(titleElement, urlElement, dateElement);
+
+        // Append notice to container
+        $("#noticeContainer").append(noticeElement);
+    });
+});
+</script>
+
