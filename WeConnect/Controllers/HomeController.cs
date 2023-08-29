@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using WeConnect.Models;
+using WeConnect.Data;
 
 
 
@@ -11,11 +12,18 @@ namespace WeConnect.Controllers
 {
     public class HomeController : Controller
     {
+		private readonly ApplicationDbContext _db;
+
+		public HomeController(ApplicationDbContext db){
+			_db =db;
+		}
+
         [Authorize]
         public IActionResult Index()
         {
             ViewData["name"]=  User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View();
+			List<Posts> posts = _db.Posts.ToList();
+            return View(posts);
         }
 
 

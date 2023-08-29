@@ -12,8 +12,8 @@ using WeConnect.Data;
 namespace WeConnect.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230829024126_ThreadKeyinUser")]
-    partial class ThreadKeyinUser
+    [Migration("20230829064819_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -252,15 +252,20 @@ namespace WeConnect.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ThreadsId")
+                    b.Property<int?>("ThreadID")
                         .HasColumnType("int");
 
                     b.Property<int>("Timestamp")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ThreadsId");
+                    b.HasIndex("ThreadID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Posts");
                 });
@@ -369,11 +374,17 @@ namespace WeConnect.Migrations
 
             modelBuilder.Entity("WeConnect.Models.Posts", b =>
                 {
-                    b.HasOne("WeConnect.Models.Threads", "Threads")
+                    b.HasOne("WeConnect.Models.Threads", "ThreadSubscribed")
                         .WithMany()
-                        .HasForeignKey("ThreadsId");
+                        .HasForeignKey("ThreadID");
 
-                    b.Navigation("Threads");
+                    b.HasOne("WeConnect.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("ThreadSubscribed");
                 });
 
             modelBuilder.Entity("WeConnect.Models.ApplicationUser", b =>

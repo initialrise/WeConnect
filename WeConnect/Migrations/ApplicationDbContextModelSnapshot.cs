@@ -250,7 +250,7 @@ namespace WeConnect.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<int>("ThreadID")
+                    b.Property<int?>("ThreadID")
                         .HasColumnType("int");
 
                     b.Property<int>("Timestamp")
@@ -265,7 +265,7 @@ namespace WeConnect.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("WeConnect.Models.Threads", b =>
@@ -281,7 +281,7 @@ namespace WeConnect.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Threads", (string)null);
+                    b.ToTable("Threads");
 
                     b.HasData(
                         new
@@ -374,9 +374,7 @@ namespace WeConnect.Migrations
                 {
                     b.HasOne("WeConnect.Models.Threads", "ThreadSubscribed")
                         .WithMany()
-                        .HasForeignKey("ThreadID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ThreadID");
 
                     b.HasOne("WeConnect.Models.ApplicationUser", "Author")
                         .WithMany()
