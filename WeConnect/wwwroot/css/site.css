@@ -159,3 +159,24 @@ textarea {
 	margin-top:50px;
 }
 
+input,button,select {
+   color: var(--gruvprofile);
+  background: var(--gruvgrey);
+    margin:20px;
+  width:30%;
+  padding:15px;
+  border-radius:50px;
+    font-size:large;
+}
+input {
+	text-align:center;
+}
+
+.identity-form {
+	text-align:center;
+}
+.post-submit {
+	width:15%;
+	padding:1px;
+	margin-bottom:10px;
+}
