@@ -1,4 +1,16 @@
-﻿
+﻿@{
+    //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var email = User.Identity.Name;
+    var userName="";
+    if(!string.IsNullOrWhiteSpace(email) && email.Length>3){
+    userName = email.Split("@")[0];
+    }
+
+    //var userName = email.Length>3?email.Split("@")[0]:"";
+
+    // Query your database or perform any other actions with the user's information if needed.
+    // var current_user = _db.ApplicationUsers.Find(userId);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,19 +36,22 @@
             <input type="text" class="searchBox" />
         </form>
         <div id="profile-head">
-            <span class="profile-name">iamlonelyok</span><br />
-            <span>1.3K Likes</span>
+            <span class="profile-name"><a href="/Identity/Account/Logout">@userName</a></span><br />
+            @* <span>1.3K Likes</span> *@
         </div>
     </nav>
 
     <div id="main">
-        <div id="post-selector">
-            <ul>
-                <li><a asp-controller="Home" asp-action="Index">Posts</a></li>
-                <li><a asp-controller="Home" asp-action="Jobs">Jobs and Internships</a></li>
-                <li><a asp-controller="Home" asp-action="Notices">Notices</a></li>
-            </ul>
-        </div>
+        @if (!string.IsNullOrWhiteSpace(userName))
+{
+    <div id="post-selector">
+        <ul>
+            <li><a asp-controller="Home" asp-action="Index">Posts</a></li>
+            <li><a asp-controller="Home" asp-action="Jobs">Jobs and Internships</a></li>
+            <li><a asp-controller="Home" asp-action="Notices">Notices</a></li>
+        </ul>
+    </div>
+}
         @RenderBody();
           </div>
     @await RenderSectionAsync("Scripts", required: false)

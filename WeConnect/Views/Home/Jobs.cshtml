@@ -1,40 +1,48 @@
 ﻿@{
-    ViewData["Title"] = "Jobs";
+    ViewData["Title"] = "We Connect";
+    var postlists = ViewBag.uposts;
+    var uid = ViewBag.uid;
+    var ThreadID = ViewBag.ThreadID;
+
 }
-<form id="create-post" action="https://rroll.to/BRc2E9">
-    <i class="post-icon fa-regular fa-2xl fa-circle-user"></i>
-    <textarea placeholder="Create a Post"></textarea>
-    <button class="post-submit">Submit</button>
-</form>
-<div id="posts">
-    <div class="post">
-        <div class="profile-name">
-            <i class="profile-icon fa-regular fa-2xl fa-circle-user"></i>Joji
-        </div>
-        <br />
-        <div class="post-container">
-            <div class="post-stats">
+@*model List<Posts> *@
+@model Jobs
+<form id="create-post" asp-action="Jobs" asp-controller="Home" method="POST">
+            <i class="post-icon fa-regular fa-2xl fa-circle-user"></i>
+            <textarea placeholder="Post a job opening" asp-for="Content"></textarea>
+            <input type="hidden" asp-for="UserID" value=@uid/>
+            <input type="hidden" asp-for="ThreadID" value=@ThreadID/>
+            <input type="hidden" asp-for="Timestamp" value="123"/>
+            <input type="hidden" asp-for="Likes" value="1"/>
+            <input type="hidden" asp-for="Dislikes" value="0"/>
+            <button class="post-submit">Submit</button>
+        </form>
+        <div id="posts">
+            @foreach(var p in postlists){
+            <div class="post">
+                <div class="profile-name">
+                    <i class="profile-icon fa-regular fa-2xl fa-circle-user"></i>@p.uname
+                </div>
                 <br />
-                <div class="likes">
-                    <div class="rating">12</div>
-                    <i class="fa-regular fa-face-smile"></i>
-                </div>
+                <div class="post-container">
+                    <div class="post-stats">
+                        <br />
+                        <div class="likes">
+                            <div class="rating">@p.Likes</div>
+                            <i class="fa-regular fa-face-smile"></i>
+                        </div>
 
-                <div class="dislikes">
-                    <div class="rating">69</div>
-                    <i class="fa-regular fa-thumbs-down"></i>
+                        <div class="dislikes">
+                            <div class="rating">@p.Dislikes</div>
+                            <i class="fa-regular fa-thumbs-down"></i>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        @p.Content
+                    </div>
                 </div>
             </div>
-
-            <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Distinctio, facere earum ipsam harum, delectus odio commodi omnis
-                iste dolorum consequatur laboriosam tempore molestias ducimus
-                obcaecati modi. Temporibus voluptatum sint voluptatibus! Lorem
-                ipsum dolor sit, amet consectet adfaljdlkfakldklfjalkdjslfkjad
-                fadlkfjakldjflkjkljsflkj Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Natus, quae.
-            </div>
+            }
         </div>
-    </div>
-</div>
+

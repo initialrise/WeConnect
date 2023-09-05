@@ -12,32 +12,33 @@ namespace WeConnect.Controllers
 {
     public class HomeController : Controller
     {
-		private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
 
-		public HomeController(ApplicationDbContext db){
-			_db =db;
-		}
+        public HomeController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
 
         [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
-            var uid=  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var current_user = _db.ApplicationUsers.Find(uid);
             var tid = current_user.ThreadID;
             ViewBag.uid = uid;
-            ViewBag.threadID = tid; 
-            ViewBag.postlists = _db.Posts.ToList();
-            var posts = _db.Posts.ToList().Where(p=>p.ThreadID==tid);
+            ViewBag.threadID = tid;
+            ViewBag.postlists = _db.Posts.OrderByDescending(p => p.Id).ToList();
+            var posts = _db.Posts.OrderByDescending(p => p.Id).ToList().Where(p => p.ThreadID == tid);
 
             List<ApplicationUser> users = _db.ApplicationUsers.ToList();
             List<Uposts> uposts = new List<Uposts>();
-        
-            foreach(var p in posts)
+
+            foreach (var p in posts)
             {
                 var up = new Uposts();
                 var uuid = p.UserID;
-                var uname = users.Where(u=>u.Id==uuid).First().Name;
+                var uname = users.Where(u => u.Id == uuid).First().Name;
                 //uname.
                 up.uname = uname;
                 up.Id = p.Id;
@@ -67,12 +68,51 @@ namespace WeConnect.Controllers
 
         public IActionResult Jobs()
         {
+            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var current_user = _db.ApplicationUsers.Find(uid);
+            var tid = current_user.ThreadID;
+            ViewBag.uid = uid;
+            ViewBag.threadID = tid;
+            ViewBag.postlists = _db.Jobs.ToList();
+            var posts = _db.Jobs.ToList().Where(p => p.ThreadID == tid);
+
+            List<ApplicationUser> users = _db.ApplicationUsers.ToList();
+            List<Uposts> uposts = new List<Uposts>();
+
+            foreach (var p in posts)
+            {
+                var up = new Uposts();
+                var uuid = p.UserID;
+                var uname = users.Where(u => u.Id == uuid).First().Name;
+                //uname.
+                up.uname = uname;
+                up.Id = p.Id;
+                up.Likes = p.Likes;
+                up.Content = p.Content;
+                up.Dislikes = p.Dislikes;
+                up.Timestamp = p.Timestamp;
+                up.ImageURL = p.ImageURL;
+                up.ThreadID = p.ThreadID;
+                up.UserID = p.UserID;
+                uposts.Add(up);
+            }
+            ViewBag.uposts = uposts;
             return View();
         }
-			//Hosted web API REST Service base url
+        [Authorize]
+        [HttpPost]
+        public IActionResult Jobs(Jobs job)
+        {
+            _db.Jobs.Add(job);
+            _db.SaveChanges();
+            return RedirectToAction("Jobs");
+        }
+
+
+
         public async Task<ActionResult> Notices()
         {
-        string Baseurl = "https://gist.githubusercontent.com/";
+            string Baseurl = "https://gist.githubusercontent.com/";
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(Baseurl);
@@ -82,12 +122,11 @@ namespace WeConnect.Controllers
                 if (Res.IsSuccessStatusCode)
                 {
                     var EmpResponse = Res.Content.ReadAsStringAsync().Result;
-					ViewBag.response = EmpResponse;
-                    //EmpInfo = JsonConvert.DeserializeObject<List<Employee>>(EmpResponse);
+                    ViewBag.response = EmpResponse;
                 }
                 return View();
             }
-        
+
 
         }
 

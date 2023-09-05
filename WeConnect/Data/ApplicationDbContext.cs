@@ -6,14 +6,15 @@ using WeConnect.Models;
 
 namespace WeConnect.Data
 {
-    public class ApplicationDbContext:IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Posts> Posts { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
         public DbSet<Threads> Threads { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
@@ -26,6 +27,16 @@ namespace WeConnect.Data
                .HasForeignKey(p => p.ThreadID);
 
             builder.Entity<Posts>()
+                .HasOne(p => p.Author)
+                .WithMany()
+                .HasForeignKey(p => p.UserID);
+
+            builder.Entity<Jobs>()
+              .HasOne(p => p.ThreadSubscribed)
+              .WithMany()
+              .HasForeignKey(p => p.ThreadID);
+
+            builder.Entity<Jobs>()
                 .HasOne(p => p.Author)
                 .WithMany()
                 .HasForeignKey(p => p.UserID);
